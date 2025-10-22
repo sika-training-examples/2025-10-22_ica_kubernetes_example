@@ -13,16 +13,21 @@ spec:
         spec:
           restartPolicy: OnFailure
           volumes:
+            - name: config
+              configMap:
+                name: redis-backup
             - name: backups
               persistentVolumeClaim:
                 claimName: redis-backup
           containers:
             - name: main
-              image: redis:8
+              image: ghcr.io/tergum-extra/redis-with-tergum:8-tergum-v0.42.0
               args:
                 - /bin/sh
                 - -c
-                - redis-cli -u 'redis://redis' --rdb /backups/backup.rdb
+                - tergum backup -c /config/tergum.yaml
               volumeMounts:
+                - name: config
+                  mountPath: /config
                 - name: backups
                   mountPath: /backups
