@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: counter-frontend-ica
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+  labels:
+    project: counter
+spec:
+  ingressClassName: openshift-default
+  tls:
+    - hosts:
+        - counter-frontend-ondrejsika.ica.sikademo.com
+      secretName: counter-frontend-ondrejsika.ica.sikademo.com-tls
+  rules:
+    - host: counter-frontend-ondrejsika.ica.sikademo.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: counter-frontend
+                port:
+                  number: 80
