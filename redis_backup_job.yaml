@@ -18,4 +18,4 @@ spec:
               args:
                 - /bin/sh
                 - -c
-                - mkdir -p /backups && redis-cli -u 'redis://redis' --rdb /backups/backup.rdb
+                - mkdir -p /tmp/backups && redis-cli -u 'redis://redis' --rdb /tmp/backups/backup.rdb
