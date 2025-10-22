@@ -5,6 +5,18 @@ metadata:
   labels:
     project: counter
 spec:
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Retain
+  volumeClaimTemplates:
+    - metadata:
+        name: redis
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
   selector:
     matchLabels:
       app: redis
@@ -14,6 +26,10 @@ spec:
         app: redis
         project: counter
     spec:
+      volumes:
+        - name: redis
+          persistentVolumeClaim:
+            claimName: redis
       containers:
         - name: main
           image: redis:8
@@ -26,3 +42,7 @@ spec:
             limits:
               memory: 100Mi
               cpu: 100m
+          volumeMounts:
+            - name: redis
+              mountPath: /data
+
