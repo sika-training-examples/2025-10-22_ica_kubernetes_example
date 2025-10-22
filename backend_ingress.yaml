@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: counter-backend
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+  labels:
+    project: counter
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - counter-backend-ondrejsika.k8s.sikademo.com
+      secretName: counter-backend-ondrejsika.k8s.sikademo.com-tls
+  rules:
+    - host: counter-backend-ondrejsika.k8s.sikademo.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: counter-backend
+                port:
+                  number: 80
