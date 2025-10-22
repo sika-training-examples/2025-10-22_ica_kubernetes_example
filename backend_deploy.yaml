@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: counter-backend
+spec:
+  revisionHistoryLimit: 0
+  replicas: 2
+  selector:
+    matchLabels:
+      app: counter-backend
+  template:
+    metadata:
+      labels:
+        app: counter-backend
+    spec:
+      containers:
+        - name: main
+          image: ghcr.io/ondrejsika/counter
+          ports:
+            - containerPort: 8000
+          env:
+            - name: BACKEND
+              value: inmemory
+          resources:
+            requests:
+              cpu: 50m
+              memory: 20Mi
+            limits:
+              cpu: 100m
+              memory: 40Mi
+
