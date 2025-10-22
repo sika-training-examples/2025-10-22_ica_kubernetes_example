@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: redis
+  labels:
+    project: counter
 spec:
   selector:
     matchLabels:
@@ -10,6 +12,7 @@ spec:
     metadata:
       labels:
         app: redis
+        project: counter
     spec:
       containers:
         - name: main

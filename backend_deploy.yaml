@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: counter-backend
+  labels:
+    project: counter
 spec:
   revisionHistoryLimit: 0
   replicas: 2
@@ -12,6 +14,7 @@ spec:
     metadata:
       labels:
         app: counter-backend
+        project: counter
     spec:
       containers:
         - name: main
