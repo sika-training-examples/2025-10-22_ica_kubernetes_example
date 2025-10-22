@@ -21,3 +21,10 @@ data:
               Dir: /backups
               Prefix: redis
               Suffix: rdb
+          - ID: azure-blob
+            AzureBlob:
+              AccountName: example7807093848
+              AccountKey: $TERGUM_AZURE_BLOB_ACCOUNT_KEY
+              ContainerName: example
+              Prefix: redis
+              Suffix: rdb

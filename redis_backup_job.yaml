@@ -25,7 +25,10 @@ spec:
               args:
                 - /bin/sh
                 - -c
-                - tergum backup -c /config/tergum.yaml
+                - tergum backup -c /config/tergum.yaml --expand-env
+              envFrom:
+                - secretRef:
+                    name: redis-backup
               volumeMounts:
                 - name: config
                   mountPath: /config
