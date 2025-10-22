@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: redis-backup
+spec:
+  # https://crontab.guru/
+  schedule: "*/1 * * * *"
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: main
+              image: redis:8
+              args:
+                - /bin/sh
+                - -c
+                - mkdir -p /backups && redis-cli -u 'redis://redis' --rdb /backups/backup.rdb
