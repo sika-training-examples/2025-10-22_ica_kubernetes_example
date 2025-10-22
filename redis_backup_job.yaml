@@ -12,10 +12,17 @@ spec:
       template:
         spec:
           restartPolicy: OnFailure
+          volumes:
+            - name: backups
+              persistentVolumeClaim:
+                claimName: redis-backup
           containers:
             - name: main
               image: redis:8
               args:
                 - /bin/sh
                 - -c
-                - mkdir -p /tmp/backups && redis-cli -u 'redis://redis' --rdb /tmp/backups/backup.rdb
+                - redis-cli -u 'redis://redis' --rdb /backups/backup.rdb
+              volumeMounts:
+                - name: backups
+                  mountPath: /backups
