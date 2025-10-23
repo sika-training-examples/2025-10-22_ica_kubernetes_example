@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: backend-migration
+  labels:
+    project: counter
+spec:
+  ttlSecondsAfterFinished: 60
+  template:
+    metadata:
+      name: backend-migration
+    spec:
+      restartPolicy: Never
+      initContainers:
+        - name: wait-for-redis
+          image: ghcr.io/sikalabs/slu:v0.92.0
+          command:
+            - sh
+            - -c
+            - slu wait-for tcp -a redis:6379
+      containers:
+        - name: main
+          image: redis
+          command:
+            - sh
+            - -c
+            - redis-cli -h redis incrby counter 1000 && sleep 10 && echo DB migration done!

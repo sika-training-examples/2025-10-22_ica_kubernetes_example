@@ -27,3 +27,11 @@ spec:
       ports:
         - protocol: TCP
           port: 6379
+    # Allow traffic from backup migration job
+    - from:
+      - podSelector:
+          matchLabels:
+            job-name: backend-migration
+      ports:
+        - protocol: TCP
+          port: 6379

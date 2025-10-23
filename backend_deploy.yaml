@@ -16,6 +16,14 @@ spec:
         app: counter-backend
         project: counter
     spec:
+      serviceAccountName: migration-job-read
+      initContainers:
+        - name: wait-for-migrations
+          image: sikalabs/kubectl
+          command:
+            - "/bin/sh"
+            - "-c"
+            - "sleep 2 && kubectl wait --for=condition=complete --timeout=600s job/backend-migration"
       containers:
         - name: main
           image: ghcr.io/ondrejsika/counter
@@ -27,7 +35,7 @@ spec:
             - name: SLOW_START
               value: '10'
             - name: EXTRA_TEXT
-              value: v2
+              value: v4
           startupProbe:
             periodSeconds: 1
             failureThreshold: 60
