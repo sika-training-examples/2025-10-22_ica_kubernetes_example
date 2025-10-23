@@ -1,0 +1,40 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: redis-netpol
+  labels:
+    project: counter
+spec:
+  podSelector:
+    matchLabels:
+      app: redis
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow traffic only from backend
+    - from:
+      - podSelector:
+          matchLabels:
+            app: counter-backend
+      ports:
+        - protocol: TCP
+          port: 6379
+    # Allow traffic from backup job
+    - from:
+      - podSelector:
+          matchLabels:
+            app: redis-backup
+      ports:
+        - protocol: TCP
+          port: 6379
+  egress:
+    # Allow DNS
+    - to:
+      - namespaceSelector: {}
+        podSelector:
+          matchLabels:
+            k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53

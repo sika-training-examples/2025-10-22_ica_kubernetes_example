@@ -1,0 +1,38 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: counter-frontend-netpol
+  labels:
+    project: counter
+spec:
+  podSelector:
+    matchLabels:
+      app: counter-frontend
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow ingress traffic from anywhere (for external access via ingress controller)
+    - from:
+      - namespaceSelector: {}
+      ports:
+        - protocol: TCP
+          port: 3000
+  egress:
+    # Allow DNS
+    - to:
+      - namespaceSelector: {}
+        podSelector:
+          matchLabels:
+            k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+    # Allow traffic to backend
+    - to:
+      - podSelector:
+          matchLabels:
+            app: counter-backend
+      ports:
+        - protocol: TCP
+          port: 8000
