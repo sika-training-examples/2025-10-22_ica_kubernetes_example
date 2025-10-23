@@ -10,10 +10,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - counter-backend-ondrejsika.k8s.sikademo.com
-      secretName: counter-backend-ondrejsika.k8s.sikademo.com-tls
+        - ccc.k8s.sikademo.com
+      secretName: ccc.k8s.sikademo.com-tls
   rules:
-    - host: counter-backend-ondrejsika.k8s.sikademo.com
+    - host: ccc.k8s.sikademo.com
       http:
         paths:
           - path: /
