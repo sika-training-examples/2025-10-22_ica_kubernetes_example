@@ -26,6 +26,12 @@ spec:
             - sh
             - -c
             - until wget -q --spider http://counter-backend/api/status; do echo 'Waiting for backend...'; sleep 2; done; echo 'Backend is up!'
+        - name: wait-for-backend-slu
+          image: ghcr.io/sikalabs/slu:v0.92.0
+          command:
+            - sh
+            - -c
+            - slu wait-for tcp -a counter-backend:80
         - name: set-healthy
           image: busybox
           command:
