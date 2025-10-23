@@ -24,6 +24,16 @@ spec:
           env:
             - name: REDIS
               value: redis
+            - name: SLOW_START
+              value: '10'
+            - name: EXTRA_TEXT
+              value: v1
+          startupProbe:
+            periodSeconds: 1
+            failureThreshold: 60
+            httpGet:
+              path: /readyz
+              port: 8000
           resources:
             requests:
               cpu: 50m
