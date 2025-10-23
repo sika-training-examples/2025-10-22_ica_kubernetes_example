@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: counter-frontend
+  labels:
+    project: counter
+spec:
+  podSelector:
+    matchLabels:
+      app: counter-frontend
+  policyTypes:
+    - Ingress
+  ingress:
+    # Allow ingress traffic from anywhere (for external access via ingress controller)
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              network.openshift.io/policy-group: ingress
+      ports:
+        - protocol: TCP
+          port: 3000
