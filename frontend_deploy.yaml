@@ -20,6 +20,12 @@ spec:
         - name: health
           emptyDir: {}
       initContainers:
+        - name: wait-for-backend
+          image: busybox
+          command:
+            - sh
+            - -c
+            - until wget -q --spider http://counter-backend/api/status; do echo 'Waiting for backend...'; sleep 2; done; echo 'Backend is up!'
         - name: set-healthy
           image: busybox
           command:
@@ -30,7 +36,7 @@ spec:
               mountPath: /tmp/health
       containers:
         - name: main
-          image: ghcr.io/ondrejsika/counter-frontend
+          image: ghcr.io/ondrejsika/counter-frontend-go
           ports:
             - containerPort: 3000
           env:
@@ -38,6 +44,8 @@ spec:
               value: http://counter-backend
             - name: FONT_COLOR
               value: blue
+            - name: FAIL_ON_ERROR
+              value: '1'
           startupProbe:
             periodSeconds: 1
             failureThreshold: 60
