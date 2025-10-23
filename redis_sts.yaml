@@ -35,6 +35,11 @@ spec:
           image: redis:8
           ports:
             - containerPort: 6379
+          startupProbe:
+            periodSeconds: 1
+            failureThreshold: 60
+            tcpSocket:
+              port: 6379
           resources:
             requests:
               memory: 50Mi
