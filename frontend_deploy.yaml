@@ -16,6 +16,18 @@ spec:
         app: counter-frontend
         project: counter
     spec:
+      volumes:
+        - name: health
+          emptyDir: {}
+      initContainers:
+        - name: set-healthy
+          image: busybox
+          command:
+            - touch
+            - /tmp/health/healthy
+          volumeMounts:
+            - name: health
+              mountPath: /tmp/health
       containers:
         - name: main
           image: ghcr.io/ondrejsika/counter-frontend
@@ -32,6 +44,15 @@ spec:
             httpGet:
               path: /api/livez
               port: 3000
+          livenessProbe:
+            failureThreshold: 1
+            exec:
+              command:
+                - cat
+                - /tmp/health/healthy
+          volumeMounts:
+            - name: health
+              mountPath: /tmp/health
           resources:
             requests:
               cpu: 100m
