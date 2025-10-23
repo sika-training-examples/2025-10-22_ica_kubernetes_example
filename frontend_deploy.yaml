@@ -24,6 +24,14 @@ spec:
           env:
             - name: API_ORIGIN
               value: http://counter-backend
+            - name: FONT_COLOR
+              value: blue
+          startupProbe:
+            periodSeconds: 1
+            failureThreshold: 60
+            httpGet:
+              path: /api/livez
+              port: 3000
           resources:
             requests:
               cpu: 100m
